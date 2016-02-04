@@ -27,8 +27,9 @@ app.use(express.static('/public'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(methodOverride('_method'));
 app.use(cookieParser());
-app.use(methodOverride)('_method')); 
+app.use(methodOverride('_method'));
 
 app.use(express.static(path.join(_dirname, 'public')));
 app.listen(process.env.PORT || 3000); 
@@ -38,7 +39,8 @@ var User = require('./models/User');
 
 /* create mongo DB */
 var mongoURI = 'mongodb://localhost/fitbuddes'; 
-if (process.env.NODE ENV === 'production');
+  if (process.env.NODE_ENV === 'production') {
+  mongoURI = process.env.MONGOLAB_URI
 }; 
 
 /* CONNECT to our mongo database */
