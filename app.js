@@ -36,6 +36,10 @@ app.listen(process.env.PORT || 3000);
 /* source in models */
 var User = require('./models/User'); 
 
+/* create mongo DB */
+var mongoURI = 'mongodb://localhost/fitbuddes'; 
+if (process.env.NODE ENV === 'production');
+}; 
 app.use('/', routes);
 app.use('/users', users);
 
