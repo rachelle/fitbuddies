@@ -58,6 +58,14 @@ app.local.title = fitbuddies;
 
 app.use('/', routes); 
 
+var User = require('./models/User'); 
+passport.use(new LocalStrategy(User.authenticate())); 
+passport.serializeUser(User.serializeUser()); 
+passport.deserializeUser(User.deserializeUser()); 
+
+/* Start the Server */
+app.listen(); 
+console.log('3000 is the magic port'); 
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
