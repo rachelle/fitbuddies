@@ -1,125 +1,134 @@
-var express = requires('express'); 
-var router  = express.Router();
+var express = require('express');
+var router = express.Router();
 
 //||||||||||||||||||||||||||--
 // REQUIRE PASSPORT
 //||||||||||||||||||||||||||--
-var passport       = require('passport'); 
-var methodOverride = require('method-override');  
+var passport = require('passport');
+var methodOverride = require('method-override');
 
 //||||||||||||||||||||||||||--
 // REQUIRE MODEL
 //||||||||||||||||||||||||||--
-var User = require('../models/User'); 
+var User    = require('../models/User');
 
-/* Renders a new User */
-function usersNew(req, res) { 
-  res.render('auth/register'); 
-}; 
 
-/* Renders all users */
-var usersIndex = function(req, res, next) { 
-  User.find(function(err, users) { 
-    if (err) res.json({ message: 'Could not find any Users'}); 
-      res.render('./users', { 
-        title: "Here are all the Users", 
-        users: users, 
+/* renders a new user */
+function usersNew  (req, res) {
+  res.render('auth/register');
+};
+
+
+/* renders all users */
+var usersIndex = function(req, res, next){
+  User.find(function(err, users) {
+    if (err) res.json({ message: 'Could not find any users'}); 
+      res.render('./users', {
+        title: "Here all the users", 
+        users: users,
         user: req.user
-      }); 
-  }); 
-}; 
-
-/* Creates a new User */
-function usersCreate(req, res) { 
-  User.register(new User({ 
-    username: req.body.username, 
-    height:   req.body.height, 
-    weight:   req.body.weight, 
-    status:   req.body.status, 
-    bio:      req.body.bio, 
-    avatar:   req.body.avatar, 
-    image:    req.body.image, 
-  }), req.body.password, function (err, user) { 
-    if (err) return res.render('auth/register', { user: user}); 
-      passport.authenticate('local')(req, res, function () { 
-      req.session.save(function (err) {
-
-        if (err) { 
-          return next(err); 
-        } 
-
-        res.redirect('/users/', + req.user.id); // id here?
-      }); 
-    }); 
+      });
   });
-}; 
+};
 
-/* Renders users Profile */
-var userShow = function(req, res, next) { 
-  var id = req.params.id; 
+/* creates a new user */
+function usersCreate (req, res) {
+  User.register(new User({
+    username: req.body.username,
+    name: req.body.name,
+    height: req.body.height, 
+    status: req.body.status,
+    image: req.body.image,
+    avatar: req.body.avatar,
+    weight: req.body.weight,
+    
+    url:    req.body.url,
+  }), req.body.password, function(err, user) {
+    // if (err) { console.log(err); return res.render('auth/register', {user: user}); }
+    if (err) return res.render('auth/register', {user: user});
+      passport.authenticate('local')(req, res, function () {
+      req.session.save(function (err) {
+        if (err) {
+          return next(err);
+        }
+        
+        res.redirect('/users/' + req.user.id); //+ id here?
+      });
+    });
+  });
+};
 
-  User.findById({_id: id}, function (err, user) { 
-    if (err) { res.json({ message: 'Could not find User because ' + err }); 
-    res.render( 
-      './users/show', { 
-       user: req.user
-     }); 
-  }); 
-}; 
+/* render users profile */
+var userShow = function(req, res, next){
+  var id = req.params.id;
 
-/* Renders User Edit */
-var userEdit = function(req, res, next) { 
-  var id = req.params.id; 
+  User.findById({_id:id}, function(error, user){
+    if (error) res.json({message: 'Could not find user because ' + error});
+    res.render(
+      './users/show', {
+        user: req.user
+      });
+  });
+};
 
-  User.findById({_id: id}, function (err, user) { 
+/* user is able to edit their profile */
+var userEdit = function(req, res, next){
+  var id = req.params.id;
 
-  if (err) res.json({ message: 'Could not edit user because: ' + err }); 
+  User.findById({_id:id}, function(error, user){
+//     if(error) res.json({message: 'Could not find user because ' + error});
+//     res.render(
+//       './users/edit', {
+//         user: req.user
+//       });
+//   });
+// };
 
-  // API
-  // res.json({user: user}); 
-    res.render('./users/edit', { title: 'Edit User', user: user}); 
-  }); 
-}; 
+  if(error) res.json({message: 'Could not edit user because: ' + error});
+    // API
+    // res.json({pirate: pirate});
+    res.render('./users/edit', {title: "Edit User", user: user});
+   });
+}
 
-/* Update functionality for User */
-var userUpdate = function(req, res, next) { 
-  var id = req.params.id; 
+/* user can update their profile */
+var userUpdate = function(req, res, next) {
+  var id = req.params.id;
 
-  User.findById({_id: id}, function(err, user) { 
-    if (err) res.json({ message: 'Could not find user because: ' + err }); 
+  User.findById({_id: id}, function(error, user) {
+    if (error) res.json({message: 'Could not find user because ' + error});
+    if (req.body.height) user.height = req.body.height;
+    if (req.body.name) user.name = req.body.name;
+    if (req.body.weight) user.weight = req.body.weight;
+    if (req.body.status) user.status = req.body.status;
+   
+    user.save(function(error) {
+      if (error) res.json({message: 'User successfully updated'});
+      res.redirect('/users/' + id);
+    });
+  });
+};
 
-    if (req.body.height) user.height = req.body.height; 
-    if (req.body.weight) user.weight = req.body.weight; 
-    if (req.body.status) user.status = req.body.status; 
-    if (req.body.bio)    user.bio    = req.body.bio; 
-    if (req.body.name)   user.name   = req.body.name; 
+/* user has the option to delete their account */
+var userDelete = function(req,res){
+  var id = req.params.id;
 
-    user.save(function(err) { 
-      if (err) res.json({ message: 'User successfully updated'}); 
-      res.redirect('/users/' + id); 
-    }); 
-  }); 
-}; 
-
-/* User has the option to delete their account */
-var userDelete = function(req, res) { 
-  var id = req.params.id; 
-
-  User.findByIdAndRemove({_id: id}, function(err) { 
-
-    if (err) res.send(err); 
+  User.findByAndRemove({_id: id}, function(error){
+    if (error) res.send(error);
     res.redirect('/')
-  }); 
-}; 
+  });
+};
 
-/* Export User Module */
-module.exports = { 
 
-  usersIndex:   usersIndex, 
-  usersNew:     usersNew, 
-  UsersCreate:  usersCreate, 
-  userShow:     userShow, 
-  userEdit:     userEdit, 
-  userUpdate:   userUpdate, 
-  userDelete:   userDelete
-}; 
+/* exports user module */
+module.exports = {
+
+  usersIndex:    usersIndex,
+  usersNew:      usersNew,
+  usersCreate:   usersCreate,
+  userShow:      userShow,
+  userEdit:      userEdit,
+  userUpdate:    userUpdate,
+  userDelete:    userDelete
+
+};

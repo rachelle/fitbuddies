@@ -1,26 +1,36 @@
-var http = require('http'); 
 var express = require('express');
 var path = require('path');
+var http = require('http'); 
+
 var favicon = require('serve-favicon');
 var logger = require('morgan');
-var session = require('express-session'); 
-var MongoStore = require('connect-mongo')(session); 
-var flash = require('connect-flash'); 
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var methodOverride = require('method-override'); 
-var mongoose = require('mongoose'); 
+var methodOverride = require('method-override');
+
+var mongoose = require('mongoose');
 var passport = require('passport'); 
 var LocalStrategy = require('passport-local').Strategy; 
-var routes = require('./routes/index'); 
-
+var routes = require('./routes/index');
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use(express.static('/public')); 
+
+//||||||||||||||||||||||||||--
+// CREATE MONGO DB
+//||||||||||||||||||||||||||--
+var mongoURI = 'mongodb://localhost/fitbuddies';
+if (process.env.NODE_ENV === 'production') {
+  mongoURI = process.env.MONGOLAB_URI
+};
+
+//||||||||||||||||||||||||||--
+// CONNECT TO OUR MONGO DATABASE
+//||||||||||||||||||||||||||--
+mongoose.connect(mongoURI);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -31,43 +41,35 @@ app.use(methodOverride('_method'));
 app.use(cookieParser());
 app.use(methodOverride('_method'));
 
-app.use(express.static(path.join(_dirname, 'public')));
-app.listen(process.env.PORT || 3000); 
+app.use(express.static(path.join(__dirname, 'public')));
 
-/* source in models */
-var User = require('./models/User'); 
+app.listen(process.env.PORT || 3000);
 
-/* create mongo DB */
-var mongoURI = 'mongodb://localhost/fitbuddes'; 
-  if (process.env.NODE_ENV === 'production') {
-  mongoURI = process.env.MONGOLAB_URI
-}; 
-
-/* CONNECT to our mongo database */
-mongoose.connect('mongodb://localhost:27017/fitbuddies'); 
-
-/* Auhorized middleware */
-app.use(require('expres-session')({ 
-  secret: 'aesthetics', 
-  resave: false, 
-  saveUnitialized: false
+/* authorized middleware */
+app.use(require('express-session')({
+    secret: 'aesthetic',
+    resave: false,
+    saveUninitialized: false
 }));
 
-app.use(passport.initialize()); 
-app.use(passport.session()); 
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.local.title = fitbuddies; 
+app.locals.title = 'fitgen';
 
-app.use('/', routes); 
+/* source in models */
+var User = require('./models/User');
 
-var User = require('./models/User'); 
-passport.use(new LocalStrategy(User.authenticate())); 
-passport.serializeUser(User.serializeUser()); 
-passport.deserializeUser(User.deserializeUser()); 
+app.use('/', routes);
 
-/* Start the Server */
-app.listen(); 
-console.log('3000 is the magic port'); 
+var User = require('./models/User');
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+/* start the server */
+app.listen();
+console.log('3000 is the magic port');
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -75,8 +77,6 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
-
-// error handlers
 
 // development error handler
 // will print stacktrace
@@ -99,6 +99,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;

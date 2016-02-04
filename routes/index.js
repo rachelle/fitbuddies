@@ -1,40 +1,48 @@
-var express = require('express');
-var router = express.Router();
+var express  = require('express');
+var router   = express.Router();
 
 /* passport middleware will add authenticated users */
-var passport = require('passport'); 
-var methodOverride = require('method-override'); 
+var passport       = require('passport'); 
+var methodOverride = require('method-override');
 
-/* required controllers */
-var SessionsController = require('../controllers/Sessions'); 
-var UsersController    = require('../controllers/Users'); 
+/* Required models */
+var User = require('../models/User');
 
-/* checks if the user is logged in */
-var isLoggedIn = function(req, res, next) { 
-  if (!req.isAuthenticated()) { 
+/* Required controllers */
+var SessionsController  = require('../controllers/Sessions');
+var UsersController     = require('../controllers/Users');
+
+/* GET home page. */
+router.get('/', function(req, res, next) {
+  res.render('index', {user: req.user});
+});
+
+/* checks if the user is logged in */
+var isLoggedIn = function(req, res, next) {
+  if (!req.isAuthenticated()) {
     res.redirect('/login'); 
   }
-    return next(); 
-}; 
+    return next();
+};
 
-/* renders sessions controller */
-router.get('/login', SessionsController.sessionsNew); 
+/* renders sessions controllers */
+router.get('/login',  SessionsController.sessionsNew);
 router.post('/login', passport.authenticate(
-  'local', 
-  { 
-    failureRedirect: '/login'
-  });                 SessionsController.sessionCreate); 
-router.get('/logout', SessionsController.sessionsDelete); 
+    'local',
+    {
+      failureRedirect: '/login'
+    }),                SessionsController.sessionsCreate);
+router.get('/logout',  SessionsController.sessionsDelete);
 
 
-/* renders users controller */
-router.get('/auth/register', UserController.UsersNew); 
-router.post('/auth/register', UserController.UsersCreate);
-router.get('/users', isLoggedIn, UserController.UsersIndex); 
-router.get('/users/:id', isLoggedIn, UserController.UserShow);
-router.get('/users/:id/edit', isLoggedIn, UserController.userEdit); 
-router.put('/users/:id', isLoggedIn, UserController.userUpdate); 
-router.delete('/users/:id', isLoggedIn, UserController.UserDelete); 
+/* users controller */
+router.get('/auth/register',              UsersController.usersNew);
+router.post('/auth/register',             UsersController.usersCreate);
+router.get('/users',          isLoggedIn, UsersController.usersIndex);
+router.get('/users/:id',      isLoggedIn, UsersController.userShow);
+router.get('/users/:id/edit', isLoggedIn, UsersController.userEdit);
+router.put('/users/:id',      isLoggedIn, UsersController.userUpdate);
+router.delete('/users/:id',   isLoggedIn, UsersController.userDelete);
 
-/* Export Module */
+
 module.exports = router;
