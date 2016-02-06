@@ -6,11 +6,8 @@ $(window).on('resize', function(){
   wHeight = $(window).height();
 });
 
-/**
- * requestAnimationFrame Shim 
- */
-window.requestAnimFrame = (function()
-{
+/* RequestAnimationFrame Shim */
+window.requestAnimFrame = (function() {
   return  window.requestAnimationFrame       ||
           window.webkitRequestAnimationFrame ||
           window.mozRequestAnimationFrame    ||
@@ -19,34 +16,25 @@ window.requestAnimFrame = (function()
           };
 })();
 
-/**
- * Scroller
- */
-function Scroller()
-{
+/* Scroller */
+function Scroller() {
   this.latestKnownScrollY = 0;
   this.ticking            = false;
 }
 
 Scroller.prototype = {
-  /**
-   * Initialize
-   */
+  /* Initialize */
   init: function() {
     window.addEventListener('scroll', this.onScroll.bind(this), false);
   },
 
-  /**
-   * Capture Scroll
-   */
+  /* Capture Scroll */
   onScroll: function() {
     this.latestKnownScrollY = window.scrollY;
     this.requestTick();
   },
 
-  /**
-   * Request a Tick
-   */
+  /* Request Tick */
   requestTick: function() {
     if( !this.ticking ) {
       window.requestAnimFrame(this.update.bind(this));
@@ -54,16 +42,12 @@ Scroller.prototype = {
     this.ticking = true;
   },
 
-  /**
-   * Update.
-   */
+  /* Update */
   update: function() {
     var currentScrollY = this.latestKnownScrollY;
     this.ticking       = false;
     
-    /**
-     * Do The Dirty Work Here
-     */
+    /* Parallax Functionality */
     var slowScroll = currentScrollY / 4
       , blurScroll = currentScrollY * 2;
     
@@ -79,8 +63,6 @@ Scroller.prototype = {
   }
 };
 
-/**
- * Attach!
- */
+/* Attach Scroller */
 var scroller = new Scroller();  
 scroller.init();
