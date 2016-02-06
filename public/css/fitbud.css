@@ -1,3 +1,4 @@
+@import "bourbon";
 @import url(http://fonts.googleapis.com/css?family=Lato);
 
 html, body{
@@ -21,7 +22,7 @@ header{
   height: 100%;
   position: relative;
   overflow: hidden;
-  background: url(https://dl.dropboxusercontent.com/u/16657557/scripts/blur/bg.jpg) center no-repeat; /* Image Credit: Unsplash.me */
+  background: url("/images/fitbud-banner.jpg") center no-repeat; 
   background-size: cover;
   
   .content{
@@ -30,6 +31,10 @@ header{
     z-index: 1;
   }
   
+  .page-footer { 
+    background-color: #34495E;
+  }
+
   h1, h2{
     margin: 0;
   }
@@ -56,7 +61,7 @@ header{
   .overlay{
     position: absolute;
     top: 0; right: 0; left: 0; bottom: 0;
-    background: url(https://dl.dropboxusercontent.com/u/16657557/scripts/blur/bg-blurred.jpg) center no-repeat;
+    background: url(fitbud-banner.jpg) center no-repeat;
     background-size: cover;
     z-index: 0;
     opacity: 0;
