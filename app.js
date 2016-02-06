@@ -1,6 +1,7 @@
 var express = require('express');
 var path = require('path');
-var http = require('http'); 
+ var $ = require('jquery-latest');
+ var http = require('http');
 
 var favicon = require('serve-favicon');
 var logger = require('morgan');
