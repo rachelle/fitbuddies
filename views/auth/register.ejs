@@ -40,53 +40,32 @@
 <!-- End of Navigation Bar -->
 
 <header class="register-header">
-  <h3 class="center">Register</h3>
+ <h3 class="register-title">Fitbud</h3> 
 </header>
   
 <main> 
-  <!-- Register Form -->
-  <div class="container col-sm-12"> 
-    <div class="row register-form">
-      <form action="/auth/register" method="POST"> 
-        <input type="text" placeholder="email" name="email"/>
-        <input type="text" placeholder="profile picture" name="avatar"/> 
-        <input type="text" placeholder="username" name="username"/> 
-        <input type="text" placeholder="password" name="password"/> 
-        <input type="text" placeholder="password confirmation" name="password"/>
-        <input class="register-button" type="submit" value="Register"/> 
-      </form> 
-    </div> 
-  </div>  
+  
+  <div class="register-body"></div>
+  <div class="grad"></div> 
+  <div class="register-header">
+    <div class="register-name">
+      
+    </div>
+  </div>
+
+  <div class="container register-form">
+    <!-- Register Form -->
+    <form action="/auth/register" method="POST"> 
+      <input type="text" placeholder="email" name="email"/>
+      <input type="text" placeholder="profile picture" name="avatar"/> 
+      <input type="text" placeholder="username" name="username"/> 
+      <input type="text" placeholder="password" name="password"/> 
+      <input type="text" placeholder="password confirmation" name="password"/>
+      <input class="register-button" type="submit" value="Register"/> 
+    </form> 
+  </div> 
   <!-- End of Register Form -->
 </main> 
-
-<!-- Footer Content -->
-<footer class="page-footer blue-grey darken-3">
-  <div class="container">
-    <div class="row">
-      <div class="col l6 s12">
-        <h5 class="white-text">Footer Content</h5>
-        <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
-      </div>
-      <div class="col l4 offset-l2 s12">
-        <h5 class="white-text">Links</h5>
-        <ul>
-          <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
-          <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
-          <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
-          <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="footer-copyright">
-    <div class="container">
-      © 2014 Copyright Text
-      <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
-    </div>
-  </div>
-</footer>
-<!-- End of Footer Content -->
 
 <!-- ==============================================
                         JS
