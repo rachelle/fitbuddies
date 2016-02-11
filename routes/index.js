@@ -1,5 +1,7 @@
 var express  = require('express');
 var router   = express.Router();
+var Account = require('../models/account'); 
+var router = express.Router(); 
 
 /* passport middleware will add authenticated users */
 var passport       = require('passport'); 

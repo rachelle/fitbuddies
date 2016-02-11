@@ -64,7 +64,7 @@ a.login-button:hover {
 }
 
 
-header{
+.landing-header {
   height: 100%;
   position: relative;
   overflow: hidden;
