@@ -12,11 +12,7 @@ var User = new mongoose.Schema({
 
   name: String, 
   weight: Number, 
-  avatar: String, 
-  height: String, 
-  bio: String, 
-  status: String, 
-  image: String
+  height: String 
 }); 
 
 User.plugin(passportLocalMongoose); 

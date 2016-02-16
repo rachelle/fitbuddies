@@ -1,21 +1,17 @@
 var express  = require('express');
 var router   = express.Router();
-var router = express.Router(); 
-
+var gravatar = require('gravatar');
 /* passport middleware will add authenticated users */
 var passport       = require('passport'); 
 var methodOverride = require('method-override');
 
-/* Required models */
-var User = require('../models/User');
-
 /* Required controllers */
-var SessionsController  = require('../controllers/Sessions');
-var UsersController     = require('../controllers/Users');
+var SessionsController    = require('../controllers/Sessions');
+var UsersController       = require('../controllers/Users');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', {user: req.user});
+  res.render('index', { user: req.user });
 });
 
 /* checks if the user is logged in */
@@ -27,8 +23,8 @@ var isLoggedIn = function(req, res, next) {
 };
 
 /* renders sessions controllers */
-router.get('/login',  SessionsController.sessionsNew);
-router.post('/login', passport.authenticate(
+router.get('/login',    SessionsController.sessionsNew);
+router.post('/login',   passport.authenticate(
     'local',
     {
       failureRedirect: '/login'
@@ -36,7 +32,7 @@ router.post('/login', passport.authenticate(
 router.get('/logout',  SessionsController.sessionsDelete);
 
 
-/* users controller */
+/* renders user controller */
 router.get('/auth/register',              UsersController.usersNew);
 router.post('/auth/register',             UsersController.usersCreate);
 router.get('/users',          isLoggedIn, UsersController.usersIndex);

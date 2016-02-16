@@ -1,17 +1,18 @@
-var express = require('express');
-var path = require('path');
-var http = require('http');
+var express = require('express'); 
+var http  = require('http'); 
+var path = require('path'); 
+var favicon = require('favicon'); 
+var logger = require('morgan'); 
+var cookieParser = require('cookie-parser'); 
+var methodOverride = require('method-override'); 
+var mongoose = require('mongoose'); 
+var bodyParser = require('body-parser'); 
+var methodOverride = require('method-override'); 
 
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var methodOverride = require('method-override');
-
-var mongoose = require('mongoose');
+/* require modules for mongoose and passport */
 var passport = require('passport'); 
 var LocalStrategy = require('passport-local').Strategy; 
-var routes = require('./routes/index');
+var routes = require('./routes/index'); 
 
 var app = express();
 
@@ -19,21 +20,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-//||||||||||||||||||||||||||--
-// CREATE MONGO DB
-//||||||||||||||||||||||||||--
-var mongoURI = 'mongodb://localhost/fitbuddies';
-if (process.env.NODE_ENV === 'production') {
-  mongoURI = process.env.MONGOLAB_URI
-};
 
-//||||||||||||||||||||||||||--
-// CONNECT TO OUR MONGO DATABASE
-//||||||||||||||||||||||||||--
-mongoose.connect(mongoURI);
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -41,35 +28,47 @@ app.use(methodOverride('_method'));
 app.use(cookieParser());
 app.use(methodOverride('_method'));
 
-app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(express.static(path.join(__dirname, 'public'))); 
 app.listen(process.env.PORT || 3000);
 
-/* authorized middleware */
-app.use(require('express-session')({
-    secret: 'aesthetic',
-    resave: false,
-    saveUninitialized: false
-}));
+/* Source in models */
+var User = require('./models/User'); 
 
-app.use(passport.initialize());
-app.use(passport.session());
+//||||||||||||||||||||||||||--
+// CREATE MONGO DB
+//||||||||||||||||||||||||||--
+var mongoURI = 'mongodb://localhost/fitbuds';
+if (process.env.NODE_ENV === 'production') {
+  mongoURI = process.env.MONGOLAB_URI
+};
 
-app.locals.title = 'fitgen';
+// CONNECT to our mongo database
+mongoose.connect('mongodb://localhost:27017/fitbuds');
 
-/* source in models */
-var User = require('./models/User');
+// Authorized Middleware 
+app.use(require('express-session')({ 
+  secret: 'Keyboard cat', 
+  resave: false, 
+  saveUninitialized: false
+})); 
 
-app.use('/', routes);
+app.use(passport.initialize()); 
+app.use(passport.session()); 
 
-var User = require('./models/User');
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+app.locals.title = 'fitbuds'; 
 
-/* start the server */
-app.listen();
-console.log('3000 is the magic port');
+
+app.use('/', routes); 
+
+var User = require('./models/User'); 
+passport.use(new LocalStrategy(User.authenticate())); 
+passport.serializeUser(User.serializeUser()); 
+passport.deserializeUser(User.deserializeUser()); 
+
+/* Start the server */
+app.listen(); 
+console.log('3000 is the the magic port'); 
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

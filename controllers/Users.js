@@ -34,15 +34,12 @@ var usersIndex = function(req, res, next){
 /* creates a new user */
 function usersCreate (req, res) {
   User.register(new User({
-    username: req.body.username,
+  
     name: req.body.name,
     height: req.body.height, 
-    status: req.body.status,
-    image: req.body.image,
-    avatar: req.body.avatar,
     weight: req.body.weight,
     
-    url:    req.body.url,
+    
   }), req.body.password, function(err, user) {
     // if (err) { console.log(err); return res.render('auth/register', {user: user}); }
     if (err) return res.render('auth/register', {user: user});
@@ -76,13 +73,6 @@ var userEdit = function(req, res, next){
   var id = req.params.id;
 
   User.findById({_id:id}, function(error, user){
-//     if(error) res.json({message: 'Could not find user because ' + error});
-//     res.render(
-//       './users/edit', {
-//         user: req.user
-//       });
-//   });
-// };
 
   if(error) res.json({message: 'Could not edit user because: ' + error});
     // API
@@ -100,9 +90,8 @@ var userUpdate = function(req, res, next) {
     if (req.body.height) user.height = req.body.height;
     if (req.body.name) user.name = req.body.name;
     if (req.body.weight) user.weight = req.body.weight;
-    if (req.body.status) user.status = req.body.status;
-   
-    user.save(function(error) {
+
+   user.save(function(error) {
       if (error) res.json({message: 'User successfully updated'});
       res.redirect('/users/' + id);
     });
