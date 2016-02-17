@@ -39,7 +39,7 @@ function usersCreate (req, res) {
     weight: req.body.weight,
   }), req.body.password, function(err, user) {
     // if (err) { console.log(err); return res.render('auth/register', {user: user}); }
-    if (err) return res.render('auth/register', {user: user});
+    if (err) return res.render('users/show', {user: user});
       passport.authenticate('local')(req, res, function () {
       req.session.save(function (err) {
         if (err) {
