@@ -1,13 +1,14 @@
 var express = require('express'); 
 var http  = require('http'); 
 var path = require('path'); 
-var favicon = require('favicon'); 
+var favicon = require('serve-favicon'); 
 var logger = require('morgan'); 
 var cookieParser = require('cookie-parser'); 
-var methodOverride = require('method-override'); 
-var mongoose = require('mongoose'); 
+var methodOverride = require('method-override');
+var mongoose = require('mongoose');  
 var bodyParser = require('body-parser'); 
 var methodOverride = require('method-override'); 
+
 
 /* require modules for mongoose and passport */
 var passport = require('passport'); 
@@ -20,15 +21,14 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
 app.use(cookieParser());
 app.use(methodOverride('_method'));
-
 app.use(express.static(path.join(__dirname, 'public'))); 
+
 app.listen(process.env.PORT || 3000);
 
 /* Source in models */
@@ -65,7 +65,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser()); 
 passport.deserializeUser(User.deserializeUser()); 
 
-/* Start the server */
+/* Start the server*/
 app.listen(); 
 console.log('3000 is the the magic port'); 
 

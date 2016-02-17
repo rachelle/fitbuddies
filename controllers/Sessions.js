@@ -23,8 +23,6 @@ function sessionsCreate (req, res, next) {
 // GET '/LOGOUT'
 //||||||||||||||||||||||||||--
 function sessionsDelete  (req, res) {
-  // req.logout();
-  // res.redirect('/');
   req.session.destroy(function(err){
     res.redirect('/');
   })

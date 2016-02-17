@@ -9,10 +9,10 @@ var User = require('./User');
 var User = new mongoose.Schema({ 
   /* the passport-local-mongoose module */
   /* creates the username and email for the user */
-
+  username: String, 
   name: String, 
   weight: Number, 
-  height: String 
+  height: Number
 }); 
 
 User.plugin(passportLocalMongoose); 

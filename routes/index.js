@@ -1,6 +1,6 @@
 var express  = require('express');
 var router   = express.Router();
-var gravatar = require('gravatar');
+
 /* passport middleware will add authenticated users */
 var passport       = require('passport'); 
 var methodOverride = require('method-override');
@@ -40,6 +40,7 @@ router.get('/users/:id',      isLoggedIn, UsersController.userShow);
 router.get('/users/:id/edit', isLoggedIn, UsersController.userEdit);
 router.put('/users/:id',      isLoggedIn, UsersController.userUpdate);
 router.delete('/users/:id',   isLoggedIn, UsersController.userDelete);
+
 
 
 module.exports = router;

@@ -18,7 +18,6 @@ function usersNew  (req, res) {
   res.render('auth/register');
 };
 
-
 /* renders all users */
 var usersIndex = function(req, res, next){
   User.find(function(err, users) {
@@ -34,12 +33,10 @@ var usersIndex = function(req, res, next){
 /* creates a new user */
 function usersCreate (req, res) {
   User.register(new User({
-  
+    username: req.body.username, 
     name: req.body.name,
     height: req.body.height, 
     weight: req.body.weight,
-    
-    
   }), req.body.password, function(err, user) {
     // if (err) { console.log(err); return res.render('auth/register', {user: user}); }
     if (err) return res.render('auth/register', {user: user});
