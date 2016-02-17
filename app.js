@@ -17,6 +17,10 @@ var routes = require('./routes/index');
 
 var app = express();
 
+// CONNECT to our mongo database
+mongoose.connect('mongodb://localhost:27017/fitbuds');
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -42,8 +46,6 @@ if (process.env.NODE_ENV === 'production') {
   mongoURI = process.env.MONGOLAB_URI
 };
 
-// CONNECT to our mongo database
-mongoose.connect('mongodb://localhost:27017/fitbuds');
 
 // Authorized Middleware 
 app.use(require('express-session')({ 

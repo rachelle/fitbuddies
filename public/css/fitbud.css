@@ -242,3 +242,49 @@ a.login-button:hover {
 ::-moz-input-placeholder{
    color: white;
 }
+
+/* User Show Page */
+$ff: 'Open Sans', sans-serif;
+
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.wrapper{
+  background-color: white;
+  width: 450px;
+  height: 500px;
+  margin: 0 auto;
+  margin-top: 50px;
+  border-radius: 5px;
+}
+
+.user-image{
+  height: 50%;
+  width: auto; 
+  background-image: url('http://www.newschool.edu/uploadedImages/Parsons/Profiles/jamer_hunt_profile.jpg?n=4468');
+  padding-right: 10px;
+}
+
+.user-text{
+  margin-top: 30px;
+}
+
+.user-name{
+  margin-left: 20px;
+}
+
+.user-info{
+  margin-left: 20px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+
+
+
+
+
+
+

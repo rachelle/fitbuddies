@@ -70,13 +70,13 @@ var userEdit = function(req, res, next){
   var id = req.params.id;
 
   User.findById({_id:id}, function(error, user){
-
-  if(error) res.json({message: 'Could not edit user because: ' + error});
-    // API
-    // res.json({pirate: pirate});
-    res.render('./users/edit', {title: "Edit User", user: user});
-   });
-}
+    if(error) res.json({message: 'Could not find user because ' + error});
+    res.render(
+      './users/edit', {
+        user: req.user
+      });
+  });
+};
 
 /* user can update their profile */
 var userUpdate = function(req, res, next) {

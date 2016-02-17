@@ -1,17 +1,22 @@
-var express  = require('express');
+var express  = require('express'), 
+    passport = require('passport');
+    methodOverride = require('method-override');
+
+/* Required Models */
+var User = require('../models/User'); 
+var db   = require('../models/db');
 var router   = express.Router();
 
-/* passport middleware will add authenticated users */
-var passport       = require('passport'); 
-var methodOverride = require('method-override');
 
 /* Required controllers */
 var SessionsController    = require('../controllers/Sessions');
 var UsersController       = require('../controllers/Users');
 
+
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { user: req.user });
+  res.render('index', {user: req.user});
 });
 
 /* checks if the user is logged in */
@@ -23,8 +28,8 @@ var isLoggedIn = function(req, res, next) {
 };
 
 /* renders sessions controllers */
-router.get('/login',    SessionsController.sessionsNew);
-router.post('/login',   passport.authenticate(
+router.get('/login',  SessionsController.sessionsNew);
+router.post('/login', passport.authenticate(
     'local',
     {
       failureRedirect: '/login'
@@ -40,7 +45,5 @@ router.get('/users/:id',      isLoggedIn, UsersController.userShow);
 router.get('/users/:id/edit', isLoggedIn, UsersController.userEdit);
 router.put('/users/:id',      isLoggedIn, UsersController.userUpdate);
 router.delete('/users/:id',   isLoggedIn, UsersController.userDelete);
-
-
 
 module.exports = router;

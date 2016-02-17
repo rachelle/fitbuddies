@@ -66,3 +66,11 @@ Scroller.prototype = {
 /* Attach Scroller */
 var scroller = new Scroller();  
 scroller.init();
+
+/* User Profile Card */
+$(".hover").mouseleave(
+  function() { 
+
+    $(this).removeClass("hover"); 
+  }
+); 
