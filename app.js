@@ -9,6 +9,30 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser'); 
 var methodOverride = require('method-override'); 
 
+/* file upload with multer */
+var multer = require('multer'); 
+var storage = multer.diskStorage({ 
+  destination: function(req, file, callback) { 
+    callback(null, './uploads'); 
+  }, 
+  filename: function (req, file, callback) { 
+    callback(null, file.fieldname + '_' + Date.now()); 
+  }
+}); 
+var upload = multer({ storage: storage}).single('userPhoto'); 
+
+app.get('/', function(req, res) { 
+ res.sendFile(__dirname + "/auth/register"); 
+ }); 
+
+app.post('/api/photo', function(req, res) { 
+  upload(req, res, function(err) { 
+    if(err) { 
+      return res.end("Error uploading file");
+    }
+    res.send("File is uploaded"); 
+  }); 
+  
 
 /* require modules for mongoose and passport */
 var passport = require('passport'); 
