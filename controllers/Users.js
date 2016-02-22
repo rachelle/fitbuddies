@@ -14,7 +14,8 @@ var usersNew = function(req, res, next) {
 var usersCreate = function(req, res) {
   User.register(new User({
     username: req.body.username, 
-    name: req.body.name
+    name: req.body.name, 
+    userPhoto: req.body.userPhoto
   }), req.body.password, function(err, user) {
     if (err) return res.render('auth/register', {user: user});
     passport.authenticate('local')(req, res, function () {
@@ -46,6 +47,7 @@ function usersCreate (req, res) {
   User.register(new User({
     username: req.body.username, 
     name: req.body.name,
+    userPhoto: req.body.userPhoto, 
     height: req.body.height, 
     weight: req.body.weight,
   }), req.body.password, function(err, user) {

@@ -10,6 +10,7 @@ var User = require('./User');
 /* Define User Schema */
 var UserSchema = new mongoose.Schema({ 
   username: String, 
+  userPhoto: String, 
   name: String, 
   weight: Number, 
   height: Number
