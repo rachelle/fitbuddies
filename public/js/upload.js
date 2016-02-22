@@ -23,7 +23,17 @@ $(document).ready(function() {
             },
 
             success: function(response) {
-    //TODO: We will fill this in later
+            
+              if(response.error) { 
+                status('Opps, something bad happened'); 
+                return; 
+              }
+
+              var imageUrlOnServer = response.path; 
+
+              status('Success, file uploaded to: ' + imageUrlOnServer); 
+              $('<img/>').attr('src', imageUrlOnServer).appendTo($('body')); 
+              
             }
   });
 
