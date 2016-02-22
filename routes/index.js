@@ -1,40 +1,69 @@
-var express  = require('express'), 
-    passport = require('passport');
-    methodOverride = require('method-override');
+var express  = require('express'); 
+var  passport = require('passport');
+var  methodOverride = require('method-override');
 
 /* Required Models */
 var User = require('../models/User'); 
 var db   = require('../models/db');
+
+/* Router */
 var router   = express.Router();
 
 
 /* Required controllers */
-var SessionsController    = require('../controllers/Sessions');
-var UsersController       = require('../controllers/Users');
+var SessionsController = require('../controllers/Sessions');
+var UsersController     = require('../controllers/Users');
 
-
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
+/* Adding a root route */
+router.get('/', function (req, res) {
   res.render('index', {user: req.user});
 });
 
-/* checks if the user is logged in */
-var isLoggedIn = function(req, res, next) {
+
+/*======================================
+=            Authentication            =
+======================================*/
+var authenticateUser = passport.authenticate(
+  'local', 
+  {failureRedirect: '/login'
+}); 
+
+var isLoggedIn = function (req, res, next) { 
   if (!req.isAuthenticated()) {
     res.redirect('/login'); 
   }
-    return next();
+    return next(); 
+}; 
+
+var loadCurrentUser = function(req, res, next) {
+  if (req.session.passport) {
+    User
+       .findOne({ username: req.session.passport.user })
+       .then(
+         function(user) {
+          // attach the current User instance to the request
+          req.currentUser = user;
+          next();
+         }, function(err) {
+          return next(err);
+         });
+  } else {
+    next();
+  }
 };
 
-/* renders sessions controllers */
-router.get('/login',  SessionsController.sessionsNew);
-router.post('/login', passport.authenticate(
-    'local',
-    {
-      failureRedirect: '/login'
-    }),                SessionsController.sessionsCreate);
-router.get('/logout',  SessionsController.sessionsDelete);
+/*=============================
+=            LOGIN            =
+=============================*/
+router.get('/login', SessionsController.sessionsNew); 
+router.post('/login', authenticateUser, SessionsController.sessionsCreate); 
+
+/*==============================
+=            LOGOUT            =
+==============================*/
+
+router.get('/logout',    SessionsController.sessionsDelete);
+
 
 
 /* renders user controller */

@@ -1,22 +1,33 @@
-var express = require('express');
-var router = express.Router();
-
-//||||||||||||||||||||||||||--
-// REQUIRE PASSPORT
-//||||||||||||||||||||||||||--
+//  Require passport for user registratio 
 var passport = require('passport');
-var methodOverride = require('method-override');
 
-//||||||||||||||||||||||||||--
-// REQUIRE MODEL
-//||||||||||||||||||||||||||--
-var User    = require('../models/User');
+// Required Models 
+var User = require('../models/User');
 
 
-/* renders a new user */
-function usersNew  (req, res) {
-  res.render('auth/register');
+// Renders the new user form 
+var usersNew = function(req, res, next) { 
+  res.render('auth/register', {user: req.user }); 
 };
+  
+// Posts and saves the data from the Registration form
+var usersCreate = function(req, res) {
+  User.register(new User({
+    username: req.body.username, 
+    name: req.body.name
+  }), req.body.password, function(err, user) {
+    if (err) return res.render('auth/register', {user: user});
+    passport.authenticate('local')(req, res, function () {
+      req.session.save(function (err) {
+        if (err) {
+          return next(err);
+        }
+        res.redirect('/users/' + req.user.id);
+      });
+    });
+  });
+};
+
 
 /* renders all users */
 var usersIndex = function(req, res, next){

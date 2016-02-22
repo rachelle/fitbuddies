@@ -57,15 +57,14 @@ app.use(require('express-session')({
 app.use(passport.initialize()); 
 app.use(passport.session()); 
 
-app.locals.title = 'fitbuds'; 
-
-
-app.use('/', routes); 
 
 var User = require('./models/User'); 
 passport.use(new LocalStrategy(User.authenticate())); 
 passport.serializeUser(User.serializeUser()); 
 passport.deserializeUser(User.deserializeUser()); 
+app.locals.title = 'FitBuds'
+
+app.use('/', routes); 
 
 /* Start the server*/
 app.listen(); 
