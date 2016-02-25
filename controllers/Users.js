@@ -1,34 +1,21 @@
-//  Require passport for user registratio 
+var express = require('express');
+var router  = express.Router();
+
+//||||||||||||||||||||||||||--
+// REQUIRE PASSPORT
+//||||||||||||||||||||||||||--
 var passport = require('passport');
+var methodOverride = require('method-override');
 
-// Required Models 
-var User = require('../models/User');
+//||||||||||||||||||||||||||--
+// REQUIRE MODEL
+//||||||||||||||||||||||||||--
+var User    = require('../models/User');
 
-
-// Renders the new user form 
-var usersNew = function(req, res, next) { 
-  res.render('auth/register', {user: req.user }); 
+/* renders a new user */
+function usersNew  (req, res) {
+  res.render('auth/register');
 };
-  
-// Posts and saves the data from the Registration form
-var usersCreate = function(req, res) {
-  User.register(new User({
-    username: req.body.username, 
-    name: req.body.name, 
-    userPhoto: req.body.userPhoto
-  }), req.body.password, function(err, user) {
-    if (err) return res.render('auth/register', {user: user});
-    passport.authenticate('local')(req, res, function () {
-      req.session.save(function (err) {
-        if (err) {
-          return next(err);
-        }
-        res.redirect('/users/' + req.user.id);
-      });
-    });
-  });
-};
-
 
 /* renders all users */
 var usersIndex = function(req, res, next){
@@ -45,14 +32,17 @@ var usersIndex = function(req, res, next){
 /* creates a new user */
 function usersCreate (req, res) {
   User.register(new User({
-    username: req.body.username, 
+    username: req.body.username,
     name: req.body.name,
-    userPhoto: req.body.userPhoto, 
     height: req.body.height, 
+    status: req.body.status,
+    image: req.body.image,
+    avatar: req.body.avatar,
     weight: req.body.weight,
+    url:    req.body.url,
   }), req.body.password, function(err, user) {
     // if (err) { console.log(err); return res.render('auth/register', {user: user}); }
-    if (err) return res.render('users/show', {user: user});
+    if (err) return res.render('auth/register', {user: user});
       passport.authenticate('local')(req, res, function () {
       req.session.save(function (err) {
         if (err) {
@@ -83,13 +73,13 @@ var userEdit = function(req, res, next){
   var id = req.params.id;
 
   User.findById({_id:id}, function(error, user){
-    if(error) res.json({message: 'Could not find user because ' + error});
-    res.render(
-      './users/edit', {
-        user: req.user
-      });
-  });
-};
+
+  if(error) res.json({message: 'Could not edit user because: ' + error});
+    // API
+    // res.json({user: user});
+    res.render('./users/edit', {title: "Edit User", user: user});
+   });
+}
 
 /* user can update their profile */
 var userUpdate = function(req, res, next) {
@@ -100,8 +90,9 @@ var userUpdate = function(req, res, next) {
     if (req.body.height) user.height = req.body.height;
     if (req.body.name) user.name = req.body.name;
     if (req.body.weight) user.weight = req.body.weight;
-
-   user.save(function(error) {
+    if (req.body.status) user.status = req.body.status;
+   
+    user.save(function(error) {
       if (error) res.json({message: 'User successfully updated'});
       res.redirect('/users/' + id);
     });
@@ -109,7 +100,7 @@ var userUpdate = function(req, res, next) {
 };
 
 /* user has the option to delete their account */
-var userDelete = function(req,res){
+var userDelete = function(req, res){
   var id = req.params.id;
 
   User.findByAndRemove({_id: id}, function(error){

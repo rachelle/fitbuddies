@@ -1,6 +1,6 @@
 var express  = require('express'); 
-var  passport = require('passport');
-var  methodOverride = require('method-override');
+var passport = require('passport');
+var methodOverride = require('method-override');
 
 /* Required Models */
 var User = require('../models/User'); 
@@ -35,22 +35,6 @@ var isLoggedIn = function (req, res, next) {
     return next(); 
 }; 
 
-var loadCurrentUser = function(req, res, next) {
-  if (req.session.passport) {
-    User
-       .findOne({ username: req.session.passport.user })
-       .then(
-         function(user) {
-          // attach the current User instance to the request
-          req.currentUser = user;
-          next();
-         }, function(err) {
-          return next(err);
-         });
-  } else {
-    next();
-  }
-};
 
 /*=============================
 =            LOGIN            =
