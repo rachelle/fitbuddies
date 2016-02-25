@@ -55,19 +55,6 @@ function usersCreate (req, res) {
   });
 };
 
-/* render users profile */
-var userShow = function(req, res, next){
-  var id = req.params.id;
-
-  User.findById({_id:id}, function(error, user){
-    if (error) res.json({message: 'Could not find user because ' + error});
-    res.render(
-      './users/show', {
-        user: req.user
-      });
-  });
-};
-
 /* user is able to edit their profile */
 var userEdit = function(req, res, next){
   var id = req.params.id;
@@ -98,6 +85,21 @@ var userUpdate = function(req, res, next) {
     });
   });
 };
+
+/* render users profile */
+var userShow = function(req, res, next){
+  var id = req.params.id;
+  var user_id = req.params.id; 
+
+  User.findById({_id:id}, function(error, user){
+    if (error) res.json({message: 'Could not find user because ' + error});
+    res.render(
+      './users/show', {
+        user: req.user
+      });
+  });
+};
+
 
 /* user has the option to delete their account */
 var userDelete = function(req, res){
