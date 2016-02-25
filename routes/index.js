@@ -12,7 +12,8 @@ var router   = express.Router();
 
 /* Required controllers */
 var SessionsController = require('../controllers/Sessions');
-var UsersController     = require('../controllers/Users');
+var UsersController    = require('../controllers/Users');
+var PhotosController   = require('../controllers/Photos');  
 
 /* Adding a root route */
 router.get('/', function (req, res) {
@@ -35,20 +36,29 @@ var isLoggedIn = function (req, res, next) {
     return next(); 
 }; 
 
-
 /*=============================
 =            LOGIN            =
 =============================*/
 router.get('/login', SessionsController.sessionsNew); 
-router.post('/login', authenticateUser, SessionsController.sessionsCreate); 
+router.post('/login', passport.authenticate( 
+  'local', 
+  { 
+    failureRedirect: '/login' 
+  }), SessionsController.sessionsCreate); 
 
 /*==============================
 =            LOGOUT            =
 ==============================*/
+router.get('/logout', SessionsController.sessionsDelete);
 
-router.get('/logout',    SessionsController.sessionsDelete);
-
-
+/* renders photos controller */
+router.get('/photos',          isLoggedIn, PhotosController.renderPhotosIndex);
+router.get('/photos/new',      isLoggedIn, PhotosController.renderPhotosNew); 
+router.post('/photos',         isLoggedIn, PhotosController.renderPhotosCreate);
+router.get('/photos/:id/edit', isLoggedIn, PhotosController.renderPhotosEdit);
+router.put('/photos/:id',      isLoggedIn, PhotosController.renderPhotosUpdate); 
+router.get('/photos/:id',      isLoggedIn, PhotosController.renderPhotosShow);
+router.delete('/photos/:id',   isLoggedIn, PhotosController.deletePhoto);
 
 /* renders user controller */
 router.get('/auth/register',              UsersController.usersNew);

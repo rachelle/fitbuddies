@@ -43,7 +43,7 @@ module.exports.renderPhotosCreate = function(req, res, next) {
 }; 
 
 /* Edit Photo */
-module.exports.rendersPhotosEdit = function(req, res, next) { 
+module.exports.renderPhotosEdit = function(req, res, next) { 
   var id = req.params.id; 
   var photo_id = req.params.id; 
 
@@ -59,7 +59,7 @@ module.exports.rendersPhotosEdit = function(req, res, next) {
 }; 
 
 /* Updates Photo properties */
-module.exports.renderPhotosupdate = function(req, res, next) { 
+module.exports.renderPhotosUpdate = function(req, res, next) { 
   var id = req.params.id; 
 
   Photo.findById({_id: id}, function(err, photo) { 
@@ -102,5 +102,3 @@ module.exports.deletePhoto = function(req, res) {
       res.redirect('/photos')
   }); 
 }; 
-
-}
