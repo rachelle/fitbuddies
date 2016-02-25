@@ -1,11 +1,6 @@
 var express = require('express');
 var router  = express.Router();
-
-//||||||||||||||||||||||||||--
-// REQUIRE PASSPORT
-//||||||||||||||||||||||||||--
 var passport = require('passport');
-var methodOverride = require('method-override');
 
 //||||||||||||||||||||||||||--
 // REQUIRE MODEL
@@ -31,24 +26,24 @@ var usersIndex = function(req, res, next){
 
 /* creates a new user */
 function usersCreate (req, res) {
-  User.register(new User({
-    username: req.body.username,
-    name: req.body.name,
-    height: req.body.height, 
-    status: req.body.status,
-    image: req.body.image,
-    avatar: req.body.avatar,
-    weight: req.body.weight,
-    url:    req.body.url,
-  }), req.body.password, function(err, user) {
-    // if (err) { console.log(err); return res.render('auth/register', {user: user}); }
+  User.register(
+    new User({
+      username: req.body.username,
+      name: req.body.name,
+      height: req.body.height, 
+      status: req.body.status,
+      image: req.body.image,
+      avatar: req.body.avatar,
+      weight: req.body.weight,
+      url:    req.body.url,
+    }), req.body.password, function(err, user) {
+
     if (err) return res.render('auth/register', {user: user});
       passport.authenticate('local')(req, res, function () {
       req.session.save(function (err) {
         if (err) {
           return next(err);
         }
-        
         res.redirect('/users/' + req.user.id); //+ id here?
       });
     });

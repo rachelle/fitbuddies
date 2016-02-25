@@ -4,15 +4,15 @@ var User = require('../models/User');
 var router = express.Router();
 
 
-//||||||||||||||||||||||||||--
-// GET '/LOGIN'
-//||||||||||||||||||||||||||--
+// GET Login 
 function sessionsNew  (req, res) {
   res.render('auth/login', {user : req.user});
 };
+
 //||||||||||||||||||||||||||--
 // POST ACTUALLY LOGS IN DOUBLE CHECK THIS WITHOUT SESSIONS CREATE..
 //||||||||||||||||||||||||||--
+// POST User Login and Checks this without Sessions Create
 function sessionsCreate (req, res, next) {
     req.session.save(function (err) {
       if (err) return next(err);
@@ -44,5 +44,6 @@ function isLoggedIn(req, res, next) {
 module.exports = {
   sessionsNew:     sessionsNew,
   sessionsCreate:  sessionsCreate,
+  isLoggedIn:      isLoggedIn, 
   sessionsDelete:  sessionsDelete
 };
