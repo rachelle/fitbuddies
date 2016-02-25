@@ -1,57 +1,43 @@
 var express  = require('express'); 
 var passport = require('passport');
-var methodOverride = require('method-override');
-
-/* Required Models */
-var User = require('../models/User'); 
-var db   = require('../models/db');
-
-/* Router */
 var router   = express.Router();
 
+// required models
+var User = require('../models/User'); 
+var Photo = require('../models/Photo'); 
+var db   = require('../models/db');
 
-/* Required controllers */
+// required controllers 
 var SessionsController = require('../controllers/Sessions');
 var UsersController    = require('../controllers/Users');
 var PhotosController   = require('../controllers/Photos');  
 
-/* Adding a root route */
+// adding a root route
 router.get('/', function (req, res) {
   res.render('index', {user: req.user});
 });
 
-
-/*======================================
-=            Authentication            =
-======================================*/
-var authenticateUser = passport.authenticate(
-  'local', 
-  {failureRedirect: '/login'
-}); 
-
+// middleware to make sure a user is logged in 
 var isLoggedIn = function (req, res, next) { 
-  if (!req.isAuthenticated()) {
-    res.redirect('/login'); 
-  }
+  // if user is authenticated in the session, carry on 
+  if (req.isAuthenticated()) {
     return next(); 
-}; 
+  // if they aren't redirect them to the login page
+  }
+  res.redirect('/login'); 
+};
 
-/*=============================
-=            LOGIN            =
-=============================*/
-router.get('/login', SessionsController.sessionsNew); 
-router.post('/login', passport.authenticate( 
-  'local', 
-  { 
-    failureRedirect: '/login' 
-  }), SessionsController.sessionsCreate); 
+// renders sessions controller
+router.get('/login',    SessionsController.sessionsNew);
+router.post('/login',   passport.authenticate(
+    'local',
+    {
+      failureRedirect: '/login'
+    }),                SessionsController.sessionsCreate);
+router.get('/logout',  SessionsController.sessionsDelete);
 
-/*==============================
-=            LOGOUT            =
-==============================*/
-router.get('/logout', SessionsController.sessionsDelete);
 
-/* renders photos controller */
+// render photos controller
 router.get('/photos',          isLoggedIn, PhotosController.renderPhotosIndex);
 router.get('/photos/new',      isLoggedIn, PhotosController.renderPhotosNew); 
 router.post('/photos',         isLoggedIn, PhotosController.renderPhotosCreate);
@@ -60,7 +46,7 @@ router.put('/photos/:id',      isLoggedIn, PhotosController.renderPhotosUpdate);
 router.get('/photos/:id',      isLoggedIn, PhotosController.renderPhotosShow);
 router.delete('/photos/:id',   isLoggedIn, PhotosController.deletePhoto);
 
-/* renders user controller */
+// render users controller
 router.get('/auth/register',              UsersController.usersNew);
 router.post('/auth/register',             UsersController.usersCreate);
 router.get('/users',          isLoggedIn, UsersController.usersIndex);

@@ -1,11 +1,11 @@
-var mongoose = require('mongoose'); 
-var Schema = mongoose.Schema; 
-var passportLocalMongoose = require('passport-local-mongoose'); 
+var mongoose = require('mongoose'),  
+    Schema = mongoose.Schema,
+    passportLocalMongoose = require('passport-local-mongoose'); 
 
-/* Required models */
+// require models
 var User = require('./User'); 
 
-/* Define User Schema */
+// define User Schema
 var User = new mongoose.Schema({ 
   // the passport-local-mongoose module will automatically 
   // create a username and other fields for the hash
@@ -13,7 +13,8 @@ var User = new mongoose.Schema({
   userPhoto: String, 
   name: String, 
   weight: Number, 
-  height: Number
+  height: Number, 
+  admin: Boolean
 }); 
 
 /* Insert Passport Middleware */

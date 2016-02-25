@@ -6,12 +6,15 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var flash = require('connect-flash');
-var multer = require('multer'); 
+var multer = require('multer');
+var jwt = require('jsonwebtoken'); 
+ 
 
 // Require modules for mongoose and passport
 var mongoose = require('mongoose');
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
+var passport = require('passport'),
+    LocalStrategy = require('passport-local').Strategy;
+
 
 var routes = require('./routes/index'); 
 
@@ -24,6 +27,7 @@ app.set('view engine', 'ejs');
 app.listen(process.env.PORT || 3000);
 
 app.use(logger('dev'));
+app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
@@ -47,9 +51,21 @@ app.use('/', routes);
 
 // passport configurations
 var User = require('./models/User');
+
 passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+
+// serialize User 
+passport.serializeUser(function(user, done) { 
+  done(null, user.id); 
+}); 
+
+// deserialize User 
+passport.deserializeUser(function(id, done) { 
+  User.findById(id, function(err, user) { 
+    done(err, user); 
+  }); 
+}); 
+
 
 // create mongoURI
 var mongoURI = 'mongodb://localhost/fitbuds';

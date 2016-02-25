@@ -14,18 +14,16 @@ function sessionsNew  (req, res) {
 //||||||||||||||||||||||||||--
 // POST User Login and Checks this without Sessions Create
 function sessionsCreate (req, res, next) {
-    req.session.save(function (err) {
-      if (err) return next(err);
+  req.session.save(function (err) {
+    if (err) return next(err);
       res.redirect('/users/' + req.user.id);
-    });
-  };
+  });
+};
 
-//||||||||||||||||||||||||||--
-// GET '/LOGOUT'
-//||||||||||||||||||||||||||--
+// GET logout
 function sessionsDelete  (req, res) {
   req.session.destroy(function(err){
-    res.redirect('/');
+  res.redirect('/');
   })
 };
 
@@ -38,9 +36,7 @@ function isLoggedIn(req, res, next) {
   res.redirect('/login');
 }
 
-//||||||||||||||||||||||||||--
-// EXPORT FUNCTIONS
-//||||||||||||||||||||||||||--
+// export modules
 module.exports = {
   sessionsNew:     sessionsNew,
   sessionsCreate:  sessionsCreate,

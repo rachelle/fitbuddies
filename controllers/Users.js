@@ -35,11 +35,12 @@ function usersCreate (req, res) {
       image: req.body.image,
       avatar: req.body.avatar,
       weight: req.body.weight,
-      url:    req.body.url,
-    }), req.body.password, function(err, user) {
+      url:    req.body.url
+    }), 
+  req.body.password, function(err, user) {
 
     if (err) return res.render('auth/register', {user: user});
-      passport.authenticate('local')(req, res, function () {
+    passport.authenticate('local')(req, res, function () {
       req.session.save(function (err) {
         if (err) {
           return next(err);
@@ -52,9 +53,9 @@ function usersCreate (req, res) {
 
 /* user is able to edit their profile */
 var userEdit = function(req, res, next){
-  var id = req.params.id;
+  var id = req.params.user_id;
 
-  User.findById({_id:id}, function(error, user){
+  User.find({_id: id}, function(error, user){
 
   if(error) res.json({message: 'Could not edit user because: ' + error});
     // API
@@ -106,16 +107,18 @@ var userDelete = function(req, res){
   });
 };
 
+var secret = function(req, res, next) { 
+  res.render('user/secret', {user: req.user}); 
+}
 
 /* exports user module */
 module.exports = {
-
   usersIndex:    usersIndex,
   usersNew:      usersNew,
   usersCreate:   usersCreate,
   userShow:      userShow,
   userEdit:      userEdit,
   userUpdate:    userUpdate,
-  userDelete:    userDelete
-
-};
+  userDelete:    userDelete, 
+  secret:        secret
+}
