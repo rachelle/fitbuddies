@@ -19,7 +19,6 @@
     "express-session": "^1.13.0",
     "favicon": "0.0.2",
     "gravatar": "^1.4.0",
-    "jsonwebtoken": "^5.7.0",
     "logger": "0.0.1",
     "materialize-css": "^0.97.5",
     "materialize-sass": "^0.95.2",

@@ -7,8 +7,7 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var flash = require('connect-flash');
 var multer = require('multer');
-var jwt = require('jsonwebtoken'); 
- 
+
 
 // Require modules for mongoose and passport
 var mongoose = require('mongoose');
