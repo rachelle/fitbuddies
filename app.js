@@ -6,8 +6,19 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var flash = require('connect-flash');
-var multer = require('multer');
 
+var multer = require('multer');
+var multerStorageSettings = multer.diskStorage({ 
+  destination: function(req, file, cb) { 
+    cb(null, './images/'); 
+  }, 
+  filename: function(req, file, cb) { 
+    console.log("Changing file name"); 
+    cb(null, file.originalname + '_' + Date.now()); 
+  }
+}); 
+
+var upload = multer({storage: multerStorageSettings}); 
 
 // Require modules for mongoose and passport
 var mongoose = require('mongoose');
@@ -75,29 +86,9 @@ if (process.env.NODE_ENV === 'production') {
 // connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/fitbuds');
 
-app.post('/api/photos', function(req, res) {
-  
-  var serverPath = '/images/' + req.files.userPhoto.name;
-
-    require('fs').rename(
-      req.files.userPhoto.path,
-      '/Users/mark/code/examples/file-upload/upload-example-app/public' + serverPath,
-      function(error) {
-        if(error) {
-          res.send({
-            error: 'Ah crap! Something bad happened'
-          });
-          
-          return;
-        }
-        
-        res.send({
-          path: serverPath
-        });
-      }
-    );
+app.post('/api/photos', upload.single('avatar'), function(req, res, next) {
+  console.log("this is in request", req.file, "this is the file", req.body);
 });
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

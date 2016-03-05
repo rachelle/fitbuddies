@@ -1,6 +1,8 @@
 var express  = require('express'); 
 var passport = require('passport');
 var router   = express.Router();
+var multer   = require('multer'); 
+var upload   = multer({dest: './images/'})
 
 // required models
 var User = require('../models/User'); 
@@ -41,6 +43,7 @@ router.get('/logout',  SessionsController.sessionsDelete);
 router.get('/photos',          isLoggedIn, PhotosController.renderPhotosIndex);
 router.get('/photos/new',      isLoggedIn, PhotosController.renderPhotosNew); 
 router.post('/photos',         isLoggedIn, PhotosController.renderPhotosCreate);
+router.post('/photos/upload',  isLoggedIn, PhotosController.callMe); 
 router.get('/photos/:id/edit', isLoggedIn, PhotosController.renderPhotosEdit);
 router.put('/photos/:id',      isLoggedIn, PhotosController.renderPhotosUpdate); 
 router.get('/photos/:id',      isLoggedIn, PhotosController.renderPhotosShow);
