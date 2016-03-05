@@ -6,6 +6,7 @@ var passport = require('passport');
 // REQUIRE MODEL
 //||||||||||||||||||||||||||--
 var User    = require('../models/User');
+var Photo   = require('../models/Photo'); 
 
 /* renders a new user */
 function usersNew  (req, res) {

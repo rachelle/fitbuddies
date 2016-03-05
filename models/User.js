@@ -4,6 +4,7 @@ var mongoose = require('mongoose'),
 
 // require models
 var User = require('./User'); 
+var Photo = require('./Photo'); 
 
 // define User Schema
 var User = new mongoose.Schema({ 
@@ -14,7 +15,12 @@ var User = new mongoose.Schema({
   name: String, 
   weight: Number, 
   height: Number, 
-  admin: Boolean
+  admin: Boolean,
+
+  photos: [{ 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref:  'Photo'
+  }], 
 }); 
 
 /* Insert Passport Middleware */
