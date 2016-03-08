@@ -31,6 +31,7 @@ module.exports.renderPhotosCreate = function(req, res, next) {
     caption: req.body.caption,
     userPhoto: req.body.userPhoto,  
     image:   req.body.image, 
+    avatar:  req.body.avatar, 
     upload:  req.body.upload, 
     user_id: req.user_id
   }); 
