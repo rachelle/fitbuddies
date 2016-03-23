@@ -31,6 +31,7 @@ module.exports.renderPhotosCreate = function(req, res, next) {
     caption: req.body.caption,
     userPhoto: req.body.userPhoto,  
     image:   req.body.image, 
+    file:    req.body.file, 
     avatar:  req.body.avatar, 
     upload:  req.body.upload, 
     user_id: req.user_id
@@ -70,6 +71,8 @@ module.exports.renderPhotosUpdate = function(req, res, next) {
       if (req.body.upload)  photo.upload  = req.body.uplaod;
       if (req.body.userPhoto) photo.userPhoto = req.body.userPhoto; 
       if (req.body.caption) photo.caption = req.body.caption; 
+      if (req.body.avatar)  photo.avatar = req.body.avatar; 
+      if (req.body.file)    photo.file = req.body.file;
       if (req.body.data_taken) photo.data_taken = req.body.date_taken; 
       if (req.body.comment) photo.comment = req.body.comment; 
 

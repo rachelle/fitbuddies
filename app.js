@@ -9,7 +9,8 @@ var flash = require('connect-flash');
 
 // multer image upload config
 var multer = require('multer');
-var upload = multer({ dest: 'uploads/' })
+var upload = multer({dest: 'uploads/'})
+
 
 // Require modules for mongoose and passport
 var mongoose = require('mongoose');
@@ -35,6 +36,7 @@ app.use(cookieParser());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(flash());
+
 
 // auth middleware
 app.use(require('express-session')({
@@ -78,7 +80,17 @@ mongoose.connect('mongodb://localhost:27017/fitbuds');
 
 app.post('/photos/upload', upload.single('avatar'), function(req, res, next) {
   console.log("this is in request", req.file, "this is the file", req.body);
+  console.log(req.body); 
+  console.log(req.file); 
+  res.send(req.file);  
+ 
+  return next(); 
 });
+
+app.get('/photos/upload', function(req, res) { 
+  res.sendFile(__dirname + '/photos/upload');
+
+}); 
 
 
 // catch 404 and forward to error handler
